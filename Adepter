@@ -1,0 +1,47 @@
+implements Filterable
+
+
+
+  @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+                    listFiltered = feedsList;
+                } else {
+                    List<NewsFeeds> filteredList = new ArrayList<>();
+                    for (NewsFeeds row : feedsList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getFeedName().toLowerCase().contains(charString.toLowerCase()) || row.getContent().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    listFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = listFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                System.out.println("Count Number 2 " + ((List<NewsFeeds>) results.values).size());
+                notifyDataSetChanged();
+            }
+        };
+    }
+    
+    
+      public List<NewsFeeds> getList() {
+        return listFiltered;
+    }
